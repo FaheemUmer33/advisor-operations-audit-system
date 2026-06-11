@@ -8,10 +8,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="min-h-screen bg-surface">
       <Sidebar />
       <main className="lg:pl-72">
-        <header className="no-print sticky top-0 z-20 border-b border-slate-200 bg-white/85 backdrop-blur">
+        <header className="no-print sticky top-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
                 Smart Logics
               </p>
               <p className="text-sm font-medium text-slate-900">
@@ -27,7 +27,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">{children}</div>
+        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+          <div className="animate-[fadeIn_220ms_ease-out]">{children}</div>
+        </div>
       </main>
     </div>
   );

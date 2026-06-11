@@ -19,7 +19,7 @@ export function LoginForm() {
           type="email"
           required
           defaultValue="admin@smartlogics.com"
-          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm shadow-sm outline-none transition-all duration-200 ease-out hover:border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
         />
       </label>
       <label className="block text-sm font-medium text-slate-700">
@@ -29,10 +29,10 @@ export function LoginForm() {
           type="password"
           required
           defaultValue="admin123"
-          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm shadow-sm outline-none transition-all duration-200 ease-out hover:border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
         />
       </label>
-      <button type="submit" className="min-h-10 w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+      <button type="submit" className="min-h-10 w-full rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 ease-out hover:border-blue-700 hover:bg-blue-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99]">
         Login
       </button>
     </form>

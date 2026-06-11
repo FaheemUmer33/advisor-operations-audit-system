@@ -15,21 +15,22 @@ type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 
 const toneClasses: Record<Tone, string> = {
   default: "border-slate-200 bg-slate-50 text-slate-700",
-  success: "border-green-200 bg-green-50 text-green-700",
+  success: "border-emerald-200 bg-emerald-50 text-emerald-700",
   warning: "border-amber-200 bg-amber-50 text-amber-700",
-  danger: "border-red-200 bg-red-50 text-red-700",
+  danger: "border-rose-200 bg-rose-50 text-rose-700",
   blue: "border-blue-200 bg-blue-50 text-blue-700",
   purple: "border-violet-200 bg-violet-50 text-violet-700",
 };
 
 const buttonClasses: Record<ButtonVariant, string> = {
   primary:
-    "border border-blue-600 bg-blue-600 text-white shadow-sm hover:bg-blue-700 hover:border-blue-700",
+    "border border-blue-600 bg-blue-600 text-white shadow-sm hover:border-blue-700 hover:bg-blue-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none",
   secondary:
-    "border border-slate-300 bg-white text-slate-700 shadow-sm hover:border-slate-400 hover:bg-slate-50",
+    "border border-slate-300 bg-white text-slate-700 shadow-sm hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60",
   danger:
-    "border border-red-600 bg-red-600 text-white shadow-sm hover:border-red-700 hover:bg-red-700",
-  ghost: "border border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+    "border border-red-600 bg-red-600 text-white shadow-sm hover:border-red-700 hover:bg-red-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60",
+  ghost:
+    "border border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60",
 };
 
 export function Card({
@@ -42,7 +43,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "print-card rounded-lg border border-slate-200 bg-white p-5 shadow-soft",
+        "print-card rounded-lg border border-slate-200/80 bg-white p-5 shadow-sm",
         className
       )}
     >
@@ -70,10 +71,10 @@ export function SectionCard({
         <div className="mb-5 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             {title ? (
-              <h2 className="text-base font-semibold text-slate-950">{title}</h2>
+              <h2 className="text-base font-semibold tracking-tight text-slate-950">{title}</h2>
             ) : null}
             {description ? (
-              <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p>
+              <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-600">{description}</p>
             ) : null}
           </div>
           {action}
@@ -94,13 +95,13 @@ export function FormSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5">
+    <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-sm">
       <div className="mb-5">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-900">
           {title}
         </h2>
         {description ? (
-          <p className="mt-1 text-sm text-slate-500">{description}</p>
+          <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
         ) : null}
       </div>
       <div className="grid gap-4 md:grid-cols-2">{children}</div>
@@ -120,15 +121,15 @@ export function PageHeader({
   meta?: React.ReactNode;
 }) {
   return (
-    <div className="mb-7 rounded-lg border border-slate-200 bg-white px-5 py-5 shadow-sm">
+    <div className="mb-7 rounded-lg border border-slate-200/80 bg-white px-5 py-5 shadow-sm">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           {meta ? <div className="mb-2">{meta}</div> : null}
-          <h1 className="text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">
+          <h1 className="text-2xl font-bold tracking-[-0.01em] text-slate-950 md:text-3xl">
             {title}
           </h1>
           {description ? (
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
               {description}
             </p>
           ) : null}
@@ -152,7 +153,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition",
+        "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-out",
         buttonClasses[variant],
         className
       )}
@@ -178,7 +179,7 @@ export function ButtonLink({
     <Link
       href={href}
       className={cn(
-        "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition",
+        "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-out",
         buttonClasses[variant],
         className
       )}
@@ -212,7 +213,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold",
+        "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-semibold leading-none",
         toneClasses[tone]
       )}
     >
@@ -291,9 +292,9 @@ export function Field({
         required={required}
         min={type === "number" ? 0 : undefined}
         defaultValue={defaultValue ?? ""}
-        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all duration-200 ease-out placeholder:text-slate-400 hover:border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
       />
-      {helper ? <span className="mt-1 block text-xs text-slate-500">{helper}</span> : null}
+      {helper ? <span className="mt-1 block text-xs leading-5 text-slate-500">{helper}</span> : null}
     </label>
   );
 }
@@ -322,9 +323,9 @@ export function TextArea({
         required={required}
         defaultValue={defaultValue ?? ""}
         rows={4}
-        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm leading-6 text-slate-900 shadow-sm outline-none transition-all duration-200 ease-out placeholder:text-slate-400 hover:border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
       />
-      {helper ? <span className="mt-1 block text-xs text-slate-500">{helper}</span> : null}
+      {helper ? <span className="mt-1 block text-xs leading-5 text-slate-500">{helper}</span> : null}
     </label>
   );
 }
@@ -354,7 +355,7 @@ export function Select({
         name={name}
         required={required}
         defaultValue={defaultValue ?? options[0]}
-        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all duration-200 ease-out hover:border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -362,7 +363,7 @@ export function Select({
           </option>
         ))}
       </select>
-      {helper ? <span className="mt-1 block text-xs text-slate-500">{helper}</span> : null}
+      {helper ? <span className="mt-1 block text-xs leading-5 text-slate-500">{helper}</span> : null}
     </label>
   );
 }
@@ -381,22 +382,22 @@ export function Metric({
   tone?: Tone;
 }) {
   return (
-    <Card className="group transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-soft">
+    <Card className="group border-t-2 border-t-blue-500 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lift">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
             {label}
           </p>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-slate-950">
+          <p className="mt-2 text-2xl font-bold tracking-[-0.01em] text-slate-950">
             {value}
           </p>
           {description ? (
-            <p className="mt-2 text-xs leading-5 text-slate-500">{description}</p>
+            <p className="mt-2 text-xs leading-5 text-slate-600">{description}</p>
           ) : null}
         </div>
         <div
           className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-md border",
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-md border shadow-sm",
             toneClasses[tone]
           )}
         >
@@ -411,7 +412,7 @@ export function DataTable({ children }: { children: React.ReactNode }) {
   return (
     <Card className="overflow-hidden p-0">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">{children}</table>
+        <table className="w-full text-left text-sm leading-6">{children}</table>
       </div>
     </Card>
   );
@@ -419,7 +420,7 @@ export function DataTable({ children }: { children: React.ReactNode }) {
 
 export function TableHead({ children }: { children: React.ReactNode }) {
   return (
-    <thead className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+    <thead className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-[0.08em] text-slate-600">
       {children}
     </thead>
   );
@@ -429,7 +430,7 @@ export function TableBody({ children }: { children: React.ReactNode }) {
   return <tbody className="divide-y divide-slate-100 bg-white">{children}</tbody>;
 }
 
-export const tableCell = "px-4 py-3 align-middle";
+export const tableCell = "px-4 py-3.5 align-middle";
 
 export const statusIcons = {
   complete: CheckCircle2,
