@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  fullName     String
+  email        String   @unique
+  passwordHash String
+  role         String
+  status       String   @default("Active")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  assignedClients  Client[]    @relation("AssignedOwner")
+  assignedAudits   Audit[]     @relation("AssignedAuditor")
+  generatedReports Report[]    @relation("GeneratedReports")
+  salesNotes       SalesNote[] @relation("CreatedSalesNotes")
+}
+
+model Client {
+  id                        String   @id @default(cuid())
+  companyName               String
+  website                   String?
+  firmType                  String?
+  assetsUnderManagement     String?
+  numberOfAdvisors          Int?
+  numberOfSupportStaff      Int?
+  crmUsed                   String?
+  complianceTools           String?
+  reportingTools            String?
+  custodianPlatforms        String?
+  contactPersonName         String
+  contactPersonEmail        String
+  contactPersonPhone        String?
+  contactPersonLinkedin     String?
+  currentAutomationMaturity String?
+  mainPainPoints            String?
+  growthGoals               String?
+  status                    String
+  assignedOwnerId           String?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  assignedOwner User?       @relation("AssignedOwner", fields: [assignedOwnerId], references: [id])
+  audits        Audit[]
+  salesNotes    SalesNote[]
+}
+
+model Audit {
+  id                           String    @id @default(cuid())
+  clientId                     String
+  auditName                    String
+  auditStatus                  String
+  assignedAuditorId            String?
+  startedAt                    DateTime?
+  completedAt                  DateTime?
+  totalPriorityScore           Float     @default(0)
+  totalMonthlyHoursLost        Float     @default(0)
+  totalEstimatedMonthlySavings Float     @default(0)
+  totalEstimatedAnnualSavings  Float     @default(0)
+  recommendedStartingPoint     String?
+  executiveSummary             String?
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @updatedAt
+
+  client            Client                  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  assignedAuditor   User?                   @relation("AssignedAuditor", fields: [assignedAuditorId], references: [id])
+  workflowResponses AuditWorkflowResponse[]
+  scores            AuditScore[]
+  recommendations   Recommendation[]
+  reports           Report[]
+  salesNotes        SalesNote[]
+}
+
+model WorkflowArea {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?
+  displayOrder Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  responses       AuditWorkflowResponse[]
+  scores          AuditScore[]
+  recommendations Recommendation[]
+}
+
+model AuditWorkflowResponse {
+  id                         String   @id @default(cuid())
+  auditId                    String
+  workflowAreaId             String
+  currentProcess             String?
+  toolsUsed                  String?
+  manualSteps                String?
+  bottlenecks                String?
+  taskVolumeMonthly          Float    @default(0)
+  timePerTaskMinutes         Float    @default(0)
+  peopleInvolved             Int      @default(1)
+  hourlyCost                 Float?
+  errorRatePercentage        Float    @default(0)
+  reworkFrequency            String?
+  complianceRiskNotes        String?
+  clientExperienceImpact     String?
+  automationOpportunityNotes String?
+  consultantNotes            String?
+  monthlyHoursLost           Float    @default(0)
+  estimatedHoursSavedMonthly Float    @default(0)
+  estimatedMonthlySavings    Float    @default(0)
+  estimatedAnnualSavings     Float    @default(0)
+  isCompleted                Boolean  @default(false)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  audit        Audit        @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  workflowArea WorkflowArea @relation(fields: [workflowAreaId], references: [id])
+
+  @@unique([auditId, workflowAreaId])
+}
+
+model AuditScore {
+  id                            String   @id @default(cuid())
+  auditId                       String
+  workflowAreaId                String
+  timeDrainScore                Int      @default(1)
+  revenueImpactScore            Int      @default(1)
+  complianceRiskScore           Int      @default(1)
+  clientExperienceScore         Int      @default(1)
+  automationPotentialScore      Int      @default(1)
+  implementationComplexityScore Int      @default(1)
+  roiTimelineScore              Int      @default(1)
+  priorityScore                 Float    @default(0)
+  priorityLevel                 String   @default("Minimal Priority")
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
+
+  audit        Audit        @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  workflowArea WorkflowArea @relation(fields: [workflowAreaId], references: [id])
+
+  @@unique([auditId, workflowAreaId])
+}
+
+model Recommendation {
+  id                        String   @id @default(cuid())
+  auditId                   String
+  workflowAreaId            String
+  problemSummary            String
+  recommendationTitle       String
+  recommendationDescription String
+  suggestedSolution         String
+  expectedHoursSavedMonthly Float    @default(0)
+  expectedMonthlySavings    Float    @default(0)
+  expectedAnnualSavings     Float    @default(0)
+  roiTimelineMonths         Int      @default(3)
+  implementationComplexity  String
+  suggestedPhase            String
+  estimatedPriceRange       String
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  audit        Audit        @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  workflowArea WorkflowArea @relation(fields: [workflowAreaId], references: [id])
+
+  @@unique([auditId, workflowAreaId])
+}
+
+model Report {
+  id            String    @id @default(cuid())
+  auditId       String
+  reportTitle   String
+  reportStatus  String
+  generatedAt   DateTime?
+  generatedBy   String?
+  reportSummary String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  audit           Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  generatedByUser User? @relation("GeneratedReports", fields: [generatedBy], references: [id])
+}
+
+model SalesNote {
+  id           String    @id @default(cuid())
+  clientId     String
+  auditId      String?
+  note         String
+  followUpDate DateTime?
+  salesStatus  String
+  createdBy    String?
+  createdAt    DateTime  @default(now())
+
+  client        Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  audit         Audit? @relation(fields: [auditId], references: [id])
+  createdByUser User?  @relation("CreatedSalesNotes", fields: [createdBy], references: [id])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
