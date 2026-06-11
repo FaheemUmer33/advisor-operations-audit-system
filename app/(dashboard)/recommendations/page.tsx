@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card, EmptyState, PageHeader } from "@/components/ui";
+import { DataTable, EmptyState, PageHeader, TableBody, TableHead, tableCell } from "@/components/ui";
 import { currency } from "@/lib/calculations";
 import { prisma } from "@/lib/db";
 
@@ -8,7 +8,7 @@ export default async function RecommendationsPage() {
   return (
     <>
       <PageHeader title="Recommendations" description="Generated automation recommendations across audits." />
-      {recs.length === 0 ? <EmptyState /> : <Card className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="text-xs uppercase text-slate-500"><tr><th className="py-3">Client</th><th>Workflow</th><th>Recommendation</th><th>Monthly savings</th><th>Phase</th></tr></thead><tbody className="divide-y divide-slate-100">{recs.map((rec) => <tr key={rec.id}><td className="py-3">{rec.audit.client.companyName}</td><td>{rec.workflowArea.name}</td><td><Link className="text-accent" href={`/audits/${rec.auditId}/recommendations`}>{rec.recommendationTitle}</Link></td><td>{currency(rec.expectedMonthlySavings)}</td><td>{rec.suggestedPhase}</td></tr>)}</tbody></table></Card>}
+      {recs.length === 0 ? <EmptyState /> : <DataTable><TableHead><tr><th className={tableCell}>Client</th><th className={tableCell}>Workflow</th><th className={tableCell}>Recommendation</th><th className={tableCell}>Monthly savings</th><th className={tableCell}>Phase</th></tr></TableHead><TableBody>{recs.map((rec) => <tr className="transition hover:bg-slate-50" key={rec.id}><td className={`${tableCell} font-semibold text-slate-950`}>{rec.audit.client.companyName}</td><td className={tableCell}>{rec.workflowArea.name}</td><td className={tableCell}><Link className="font-medium text-blue-600 hover:text-blue-700" href={`/audits/${rec.auditId}/recommendations`}>{rec.recommendationTitle}</Link></td><td className={`${tableCell} font-semibold`}>{currency(rec.expectedMonthlySavings)}</td><td className={tableCell}>{rec.suggestedPhase}</td></tr>)}</TableBody></DataTable>}
     </>
   );
 }

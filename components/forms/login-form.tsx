@@ -19,7 +19,7 @@ export function LoginForm() {
           type="email"
           required
           defaultValue="admin@smartlogics.com"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-blue-100"
+          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
       </label>
       <label className="block text-sm font-medium text-slate-700">
@@ -29,10 +29,10 @@ export function LoginForm() {
           type="password"
           required
           defaultValue="admin123"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-blue-100"
+          className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
       </label>
-      <button type="submit" className="w-full rounded-md bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+      <button type="submit" className="min-h-10 w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
         Login
       </button>
     </form>

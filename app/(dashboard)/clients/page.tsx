@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
 import { deleteClientAction } from "@/app/actions/app";
-import { ButtonLink, Card, EmptyState, PageHeader } from "@/components/ui";
+import { Button, ButtonLink, Card, DataTable, EmptyState, PageHeader, StatusBadge, TableBody, TableHead, tableCell } from "@/components/ui";
 import { CLIENT_STATUSES } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import { date } from "@/lib/utils";
@@ -33,49 +33,47 @@ export default async function ClientsPage({
 
   return (
     <>
-      <PageHeader title="Clients" description="Manage advisory firm clients." action={<ButtonLink href="/clients/new"><Plus className="mr-2 h-4 w-4" />Add Client</ButtonLink>} />
+      <PageHeader title="Clients" description="Manage advisory firm profiles, discovery context, audit activity, and sales follow-up." action={<ButtonLink href="/clients/new"><Plus className="h-4 w-4" />Add Client</ButtonLink>} />
       <Card className="mb-4">
         <form className="grid gap-3 md:grid-cols-[1fr_220px_auto]" action="/clients">
-          <input name="q" placeholder="Search clients" defaultValue={q} className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-          <select name="status" defaultValue={status ?? ""} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+          <input name="q" placeholder="Search by company, contact, or firm type" defaultValue={q} className="rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+          <select name="status" defaultValue={status ?? ""} className="rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
             <option value="">All statuses</option>
             {CLIENT_STATUSES.map((item) => <option key={item}>{item}</option>)}
           </select>
-          <button className="rounded-md bg-navy px-4 py-2 text-sm font-medium text-white">Filter</button>
+          <Button type="submit">Filter</Button>
         </form>
       </Card>
       {clients.length === 0 ? <EmptyState /> : (
-        <Card className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="text-xs uppercase text-slate-500">
+        <DataTable>
+            <TableHead>
               <tr>
-                <th className="py-3">Company</th><th>Firm type</th><th>Website</th><th>Contact</th><th>Status</th><th>Last updated</th><th>Actions</th>
+                <th className={tableCell}>Company</th><th className={tableCell}>Firm type</th><th className={tableCell}>Website</th><th className={tableCell}>Contact</th><th className={tableCell}>Status</th><th className={tableCell}>Last updated</th><th className={tableCell}>Actions</th>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
+            </TableHead>
+            <TableBody>
               {clients.map((client) => (
-                <tr key={client.id}>
-                  <td className="py-3 font-medium">{client.companyName}</td>
-                  <td>{client.firmType || "Not set"}</td>
-                  <td>{client.website ? <a className="text-accent" href={client.website}>{client.website}</a> : "Not set"}</td>
-                  <td>{client.contactPersonName}</td>
-                  <td>{client.status}</td>
-                  <td>{date(client.updatedAt)}</td>
-                  <td>
+                <tr key={client.id} className="transition hover:bg-slate-50">
+                  <td className={`${tableCell} font-semibold text-slate-950`}>{client.companyName}</td>
+                  <td className={tableCell}>{client.firmType || "Not set"}</td>
+                  <td className={tableCell}>{client.website ? <a className="font-medium text-blue-600 hover:text-blue-700" href={client.website}>{client.website}</a> : "Not set"}</td>
+                  <td className={tableCell}>{client.contactPersonName}</td>
+                  <td className={tableCell}><StatusBadge status={client.status} /></td>
+                  <td className={tableCell}>{date(client.updatedAt)}</td>
+                  <td className={tableCell}>
                     <div className="flex gap-2">
-                      <Link title="View" href={`/clients/${client.id}`}><Eye className="h-4 w-4" /></Link>
-                      <Link title="Edit" href={`/clients/${client.id}?edit=1`}><Pencil className="h-4 w-4" /></Link>
-                      <Link title="Create audit" href={`/audits/new?clientId=${client.id}`}><Plus className="h-4 w-4" /></Link>
+                      <Link className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-700" title="View" href={`/clients/${client.id}`}><Eye className="h-4 w-4" /></Link>
+                      <Link className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-700" title="Edit" href={`/clients/${client.id}?edit=1`}><Pencil className="h-4 w-4" /></Link>
+                      <Link className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-700" title="Create audit" href={`/audits/new?clientId=${client.id}`}><Plus className="h-4 w-4" /></Link>
                       <form action={deleteClientAction.bind(null, client.id)}>
-                        <button title="Delete" type="submit"><Trash2 className="h-4 w-4 text-red-600" /></button>
+                        <button className="rounded-md p-1.5 text-red-600 hover:bg-red-50" title="Delete" type="submit"><Trash2 className="h-4 w-4" /></button>
                       </form>
                     </div>
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </Card>
+            </TableBody>
+        </DataTable>
       )}
     </>
   );

@@ -8,8 +8,24 @@
 
 body {
   margin: 0;
-  background: #f5f7fb;
-  color: #132238;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+::selection {
+  background: #bfdbfe;
+  color: #0b1220;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
 }
 
 @media print {
@@ -19,5 +35,10 @@ body {
 
   body {
     background: white;
+  }
+
+  .print-card {
+    break-inside: avoid;
+    box-shadow: none !important;
   }
 }
